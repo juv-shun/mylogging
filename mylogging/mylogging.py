@@ -49,7 +49,9 @@ class JsonIsoFormatter(IsoFormatter):
         self.encoder = encoder
 
     def format(self, record):
-        data = {'msg': record.msg}
+        data = {}
+        if 'message' in self.fields:
+            record.message = record.getMessage()
         if 'asctime' in self.fields:
             record.asctime = self.formatTime(record, self.datefmt)
 
