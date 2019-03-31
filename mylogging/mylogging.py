@@ -7,24 +7,20 @@ from typing import Optional
 
 def getLogger(name: Optional[str] = None,
               level: str='INFO',
-              fmt: str='text',
-              recreate: bool=False) -> logging.Logger:
+              fmt: str='text') -> logging.Logger:
     logger: logging.Logger = logging.getLogger(name)
-    if logger.handlers and not recreate:
-        return logger
+    if not logger.handlers:
+        handler = logging.StreamHandler()
+        logger.addHandler(handler)
 
-    for handler in logger.handlers:
-        logger.removeHandler(handler)
+    for h in logger.handlers:
+        if fmt.lower() == 'json':
+            h.setFormatter(JsonIsoFormatter(
+                ['asctime', 'levelname', 'message', 'name']))
+        else:
+            h.setFormatter(IsoFormatter(
+                '%(asctime)s [%(levelname)s] %(message)s'))
 
-    handler = logging.StreamHandler()
-    if fmt.lower() == 'json':
-        handler.setFormatter(JsonIsoFormatter(
-            ['asctime', 'levelname', 'message', 'name']))
-    else:
-        handler.setFormatter(IsoFormatter(
-            '%(asctime)s [%(levelname)s] %(message)s'))
-
-    logger.addHandler(handler)
     logger.setLevel(getattr(logging, level.upper()))
     return logger
 
