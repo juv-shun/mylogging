@@ -7,8 +7,12 @@ from typing import Optional
 
 def getLogger(name: Optional[str] = None,
               level: str='INFO',
-              fmt: str='text') -> logging.Logger:
+              fmt: str='text',
+              recreate: bool=False) -> logging.Logger:
     logger: logging.Logger = logging.getLogger(name)
+    if logger.handlers and not recreate:
+        return logger
+
     for handler in logger.handlers:
         logger.removeHandler(handler)
 

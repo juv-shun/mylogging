@@ -9,7 +9,7 @@ with open('LICENSE') as f:
 
 setup(
     name='mylogging',
-    version='0.0.2',
+    version='0.0.3',
     description='logging package for myself',
     long_description=readme,
     license=license,
